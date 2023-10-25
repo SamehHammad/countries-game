@@ -112,7 +112,7 @@ const SquareSplitter = () => {
           />
         </div>
       )}
-      <div  onClick={() => navigate("/countries-game/")}>
+      <div  onClick={() => navigate("/")}>
         <BiHomeHeart className="back" style={{  cursor: "pointer" }}/>
       </div>
     </div>

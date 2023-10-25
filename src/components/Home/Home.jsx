@@ -8,7 +8,7 @@ const Home = () => {
   const navigate=useNavigate()
   const conNumb = () => {
     localStorage.setItem("cNumber", JSON.stringify(numRef.current.value));
-    navigate("/countries-game/game")
+    navigate("/game")
   }
 
   return (
