@@ -16,13 +16,14 @@ const SquareSplitter = () => {
 
   const handleStarted = () => {
     setStarted(true);
+    reset()
   };
 
   useEffect(() => {
     const conNumb = JSON.parse(localStorage.getItem("cNumber"));
     const newNumberOfSelects = parseInt(conNumb, 10);
     setNumberOfSquares(newNumberOfSelects);
-    setScores(Array(newNumberOfSelects).fill(0));
+   
   }, []);
 
   const handleCountryChange = (e, index) => {
@@ -46,13 +47,15 @@ const SquareSplitter = () => {
         (country) => country.name === selectedCountries[i]
       );
       const flagURL = selectedCountry ? selectedCountry.flagURL : "";
+      const bgColor = selectedCountry ? selectedCountry.bgColor : "";
 
       squares.push(
         <div
           className="square"
           key={i}
           style={{
-            backgroundColor: `#556766`,
+            backgroundImage: bgColor,
+            
           }}
         >
           <div onClick={() => incrementScore(i)} style={{ height: "100vh" }}>
