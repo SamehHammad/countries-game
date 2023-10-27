@@ -5,25 +5,37 @@ import { countriesData, getRandomColor } from "./data"; // Assuming you're only 
 import { useNavigate } from "react-router-dom";
 import { AiOutlineReload } from "react-icons/ai";
 import { BiHomeHeart } from "react-icons/bi";
-
+import { BsFillPencilFill } from "react-icons/bs";
+import Popup from "./popup";
 
 const SquareSplitter = () => {
   const [numberOfSquares, setNumberOfSquares] = useState(0);
   const [scores, setScores] = useState(Array(0).fill(0));
   const [selectedCountries, setSelectedCountries] = useState([]);
   const [started, setStarted] = useState(false);
-  const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
+  const [text, setText] = useState('');
+  const [popupText, setPopupText] = useState('');
 
+
+  const navigate = useNavigate();
+  const handleTextChange = (newText) => {
+    setText(newText);
+    closePopup();
+  };
+  const handleAddText = () => {
+    setShowPopup(!showPopup);
+    
+  };
   const handleStarted = () => {
     setStarted(true);
-    reset()
+    reset();
   };
 
   useEffect(() => {
     const conNumb = JSON.parse(localStorage.getItem("cNumber"));
     const newNumberOfSelects = parseInt(conNumb, 10);
     setNumberOfSquares(newNumberOfSelects);
-   
   }, []);
 
   const handleCountryChange = (e, index) => {
@@ -55,7 +67,6 @@ const SquareSplitter = () => {
           key={i}
           style={{
             backgroundImage: bgColor,
-            
           }}
         >
           <div onClick={() => incrementScore(i)} style={{ height: "100vh" }}>
@@ -77,7 +88,9 @@ const SquareSplitter = () => {
                   {scores[i]}
                 </h1>
               </>
-            ) : (
+            ) : showPopup ? (
+              <Popup closeBtn={handleAddText} onTextChange={handleTextChange} setText={setPopupText} />
+              ) : (
               <>
                 <select onChange={(e) => handleCountryChange(e, i)}>
                   <option value="">Select a country</option>
@@ -87,8 +100,13 @@ const SquareSplitter = () => {
                     </option>
                   ))}
                 </select>
+                <BsFillPencilFill
+                  className="d-block m-auto mt-5 pen "
+                  onClick={handleAddText}
+                />
               </>
             )}
+                {text && <p> {text}</p>}
           </div>
         </div>
       );
@@ -99,24 +117,23 @@ const SquareSplitter = () => {
   return (
     <div className="squares-container">
       {renderSquares()}
-      {!started ? (
-        <Button
-          variant="success"
-          className="d-block m-auto mt-5 started"
-          onClick={handleStarted}
-        >
-          Start
-        </Button>
+      {!started&&!showPopup ? (
+        <>
+          <Button
+            variant="success"
+            className="d-block m-auto mt-5 started"
+            onClick={handleStarted}
+          >
+            Start
+          </Button>
+        </>
       ) : (
         <div onClick={reset}>
-          <AiOutlineReload
-            className="reset"
-            style={{  cursor: "pointer" }}
-          />
+          <AiOutlineReload className="reset" style={{ cursor: "pointer" }} />
         </div>
       )}
-      <div  onClick={() => navigate("/")}>
-        <BiHomeHeart className="back" style={{  cursor: "pointer" }}/>
+      <div onClick={() => navigate("/")}>
+        <BiHomeHeart className="back" style={{ cursor: "pointer" }} />
       </div>
     </div>
   );
